@@ -27,6 +27,7 @@ def init():
 
 
 def to_loop():
+    print("working 2!")
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
     full_database_sheet = survey_reader_client.open(
         "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
@@ -381,4 +382,5 @@ def write_done(done_putter_client, row_num):
 
 # ----------------------------------------------------------------------------------------------------------------------
 while True:
+    print("working1")
     to_loop()
