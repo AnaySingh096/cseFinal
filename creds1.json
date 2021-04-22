@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "stocksim2020",
+  "private_key_id": "4df195042f1a2b92af45f897b8d92ffdef2c81f8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDCtD0n3WJH0wrB\nGGSJ5tZGoeQ3Na94zFjMjEJziPnU2KEpqn2WxH+yyU/PzZGy2N0SdljAjezv3TC3\nstSZc8UIzxRJLUaUhsHEQCFC1ifbJPoYVtVi+b3uRqpS+he03FeHOxk6rWezuS2R\nAGF/0AYw5pLmjcHrFXkhE87VzQiYvCM+RUHkgBYG+46e80ohNiYD0a/8xPqPHv9E\n8mwbvxP+G6LDTA2UiXwTAj7BoguFGrAPf/KqppOFU/ceWTeCWton3ef+wrWA4sOk\nGawoiNh08cz5pbgSeU+oEfifyoBEyCelUMOG68THdc/4wwNuD4rih3Jm1iTFSuXK\nTWz1XSm9AgMBAAECggEAF4fx9i3u0VBjtdeNWw8/aVTqgHOoC9jiiIIRC+aLjxpJ\nTABTYlPIPSLQVwR4rd1Axpjv/AGLF6grWaAuyobv0rM4N+nVZGDu7Rl1C59XPMh4\nw1VHP8mAF1qJ/jJEiDKzD2BomatYY6OnKqWZovlQrjtHmL6cJ522QHWk4zj+53pr\nYuX4kgPXXQuqKNrswD1RFlSle8cPQPy+cMR/dA5mtCQRomD30GKdppt5zTYC+Tmu\nZ7Ra1ckzWfJvk2hlh1Y8P8yMt0Ygs7KAH5ATF0QDUFMRdXrcAbYvZ1WGTdytHkTg\n+3huuhZQnZ9GZO3FHA1yb+2SI50g0nFOjP0Jm9EVQQKBgQDozjHzfFfWvfn//fMu\nad/+UkimaULnZ+TFJSfbaAmC4+0QTwJrK0IbMXLEiVmBZN2iFxhpV1nOwO9N9y2A\nqy2DP5gZ3Y6jr9SGBDDjcQlOMduOshajHPYJLhQDKMJ71qWqEWuaEkiEFXJODJVU\nuKY24fJkK7BKTC4QULytO2mo3QKBgQDWGkBIQAiHI4t/Uv2RT760G6/L6OpbrjNo\n3DnOwcYO8Yd6khF8fLChmNmPf1Cx10z8FZDfu0anzXdXd1xLhtFub5/JcuZ3mgnV\nrXpSR+wOUMdasDRjmB1QerSV1ImDRsilSgcgCInCykpa412Y7g1wdxJMTET7FThG\nWNqAtGsGYQKBgEhK12oTv7cYcUyUEHLmP79az+KVJ0hyk7DAk/rm+KUjoBcDYe3j\nlfiZx1jOifPLXaOa5mK31FSGxwj/66pb/ZsXIWVOzp9311fybzgBfvFAPDy4gp0O\nPjyliWNdwd7wzardE/vZF5mki0U/VRPk7wB18241vt2jgF5io+RrYaklAoGBAJoT\nnC0if8CY8Nu5Iqe/JrNAtXtd68H8lByjV6qWQm0gnem0UocuyIISmIavDaheE5Xa\nAz8u68L4lyjHyhDEPdVm2SvE11w861Ttmfi6r4MB2OVHpvwBTR9MnsawhCGH//8L\nTiNcYZ9fqrDLrODQd7V2yyFDReUXOT9O1DgJHnghAoGBAJMmWeuhxMTlw146m5lP\ninSpkx4sVd6t6IdyZQL1sIKK+fssX8ADFydIrv1c5J19Vg0/knp8BHLScYA6+q0s\n7jEFZsH7jdmuaRRY++r59/VPdpQaqaGDEGWttch6uUt599S9i50Vj8fTWlExz7OJ\nUe/HWfJ+R0OyHXJnFG2tO6wl\n-----END PRIVATE KEY-----\n",
+  "client_email": "stocksim@stocksim2020.iam.gserviceaccount.com",
+  "client_id": "108146384925913545572",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/stocksim%40stocksim2020.iam.gserviceaccount.com"
+}
