@@ -3,6 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 # from datetime import datetime
 import time
 from datetime import datetime
+import random
 
 now = datetime.now()
 
@@ -27,7 +28,6 @@ def init():
 
 
 def to_loop():
-    print("working 2!")
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
     full_database_sheet = survey_reader_client.open(
         "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
@@ -61,6 +61,19 @@ def execute_command(current_command, data_getter_client, user_writer_client, don
         buyPrivate(current_command, data_getter_client, user_writer_client, done_putter_client, row_num)
 
 
+def generate_random_code(number_of_digits):
+    list_of_chars = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', "q", "w", "e", "r", 't', 'y', 'u', 'i', 'o', 'p',
+                     'a',
+                     's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Q', 'W', 'E', 'R', 'T',
+                     'Y',
+                     'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    password = ""
+    for j in range(0, number_of_digits, 1):
+        password = password + random.choice(list_of_chars)
+    print(password)
+    return password
+
+
 def buy_public(current_row, data_getter_client, user_writer_client, done_putter_client, row_num):
     stock = current_row[3]
     user_code = current_row[2]
@@ -73,7 +86,7 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
     gallery_sheet = data_getter_client.open("stock_market_sim").sheet1
     
     stock_data = gallery_sheet.get_all_records()
-    print("stock dataaaaaaaaaaaaaaaaaaaa- ",stock_data)
+    print("stock dataaaaaaaaaaaaaaaaaaaa- ", stock_data)
     coords_of_stock = cell = gallery_sheet.find(stock)
     print("COOOORDSSS = ", coords_of_stock)
     coords_of_stoc_str = str(coords_of_stock)
@@ -120,29 +133,17 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
     print("new_balance = ", new_balance)
     
     if new_balance > 0:
-        
         user_sheet.update_cell(2, 1, new_balance)
         # check if stock exists
         cell_list = user_sheet.findall(stock)
         print("dupe list = ", cell_list)
         print(cell_list)
-        if cell_list == []:
-            user_sheet.update_cell(latest + 1, 2, stock)
-            user_sheet.update_cell(latest + 1, 3, amount)
-        else:
-            
-            val = cell_list[0]
-            print(val)
-            coords_of_stock_row_str = str(val)
-            
-            stock_val = coords_of_stock_row_str[7]
-            print("val====", stock_val)
-            current_amount = user_sheet_list[-1]["Amount"]
-            print("currrrrrr", current_amount)
-            new_amount = current_amount + int(amount)
-            print("new amount = ", new_amount)
-            user_sheet.update_cell(latest, 2, stock)
-            user_sheet.update_cell(latest, 3, new_amount)
+        
+        # new shit
+        user_sheet.update_cell(latest + 1, 2, stock)
+        user_sheet.update_cell(latest + 1, 3, amount)
+        user_sheet.update_cell(latest + 1, 4, price)
+        
         print("RRRRROOOOOOWWW", row)
         new = int(num_of_stocks) - float(amount)
         gallery_sheet.update_cell(int(row), 11, new)
@@ -151,6 +152,7 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
 
 
 def sell_private(current_row, data_getter_client, user_writer_client, done_putter_client, row_num):
+    global current_amount
     print("why are you here??????????????????????????????????????????????????????????????")
     """
     scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
@@ -161,8 +163,6 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     gallery_sheet = client.open("stock_market_sim").sheet1
     """
     
-    
-    
     private_sheet = done_putter_client.open("private_market").sheet1
     private_sheet_records = private_sheet.get_all_records()
     print("PRIVATE SHEEEEEET = = ", private_sheet_records)
@@ -172,11 +172,11 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     sellers_user_code = current_row[5]
     for i in ref_sheet_records:
         print("reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef;;; ", i)
-    
+        
         code = i["username"]
         if code == sellers_user_code:
             team_name = i['team name']
-    #print(team_name)
+    # print(team_name)
     row_num_a = len(private_sheet_records) + 2
     print("row_num = ", row_num_a)
     print("PRIVATE SHEEEEET  ", private_sheet_records)
@@ -192,7 +192,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     user_sheet_list = user_sheet.get_all_records()
     stock_present = False
     x = 0
-###ldldldddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+    ###ldldldddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
     gallery_sheet = data_getter_client.open("stock_market_sim").sheet1
     stock_data = gallery_sheet.get_all_records()
     coords_of_stock = cell = gallery_sheet.find(stock_to_sell)
@@ -205,13 +205,14 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
         row = (int(row1) * 10) + int(row2)
     else:
         row = row1
-
+    
     print("-----row  ", row)
     price = stock_data[int(row) - 2]["Average\nPrice"]
     
-    if float(sellers_price_per_share)<=float(price)*1.5 and float(sellers_price_per_share)>=float(price)*0.5:
-        print("PASSED|PASSED|PASSED|PASSED   ", " sellers_price_per_share ", sellers_price_per_share," float(price)*1.5 ", float(price)*1.5, " float(price)*0.5 " , float(price)*0.5)
-    
+    if float(sellers_price_per_share) <= float(price) * 1.5 and float(sellers_price_per_share) >= float(price) * 0.5:
+        print("PASSED|PASSED|PASSED|PASSED   ", " sellers_price_per_share ", sellers_price_per_share,
+              " float(price)*1.5 ", float(price) * 1.5, " float(price)*0.5 ", float(price) * 0.5)
+        
         for i in user_sheet_list:
             x = x + 1
             if stock_to_sell == i["Stock"]:
@@ -227,13 +228,16 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
             if new_amount_of_stock_to_sell >= 0:
                 print("something")
                 user_sheet.update_cell(x + 1, 3, str(new_amount_of_stock_to_sell))
+                if new_amount_of_stock_to_sell == 0:
+                    user_sheet.delete_row(x + 1)
             row = len(private_sheet_records) + 2
             
             private_sheet.update_cell(row, 1, stock_to_sell)
             private_sheet.update_cell(row, 2, team_name)
-            private_sheet.update_cell(row, 3, amount_to_sell)
-            private_sheet.update_cell(row, 4, sellers_price_per_share)
-            private_sheet.update_cell(row, 5, '=C' + str(row) + '*D' + str(row))
+            private_sheet.update_cell(row, 3, generate_random_code(6))
+            private_sheet.update_cell(row, 4, amount_to_sell)
+            private_sheet.update_cell(row, 5, sellers_price_per_share)
+            private_sheet.update_cell(row, 6, '=D' + str(row) + '*E' + str(row))
             
             write_done(done_putter_client, row_num)
     else:
@@ -247,140 +251,88 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
     
     private_sheet = done_putter_client.open("private_market").sheet1
     private_sheet_records = private_sheet.get_all_records()
+    print("currr = === = ", current_row)
     
+    unique_code = current_row[11]
     buyers_username = current_row[9]
     team_name_of_seller = current_row[10]
-    name_of_stock = current_row[11]
+    
+    print("rec = = = = ", private_sheet_records)
     x = 0
-    stock_present = False
+    code_present = False
     for i in private_sheet_records:
         x += 1
-        if i["Company name"] == name_of_stock and i["Team Name of seller"] == team_name_of_seller:
-            price = i["Total Cost"]
+        
+        if i["Unique Transaction ID"] == unique_code:
+            price = i["Cost per Share"]
             amount = i["Amount"]
-            stock_present = True
+            stock_name = i["Company name"]
+            code_present = True
             break
-    if stock_present == True:
+    if code_present:
         print("TRUE")
         print(price)
         print(amount)
+        print("row to delete = ", x + 1)
+        private_sheet.delete_row(x + 1)
+    else:
+        print("transaction does not exist")
     
-    private_sheet = done_putter_client.open("private_market").sheet1
-    private_sheet_records = private_sheet.get_all_records()
-    buyers_code = current_row[9]
-    print(buyers_code)
-    sellers_team_name = current_row[10]
-    print(sellers_team_name)
-    
+    print("team name of seller ", team_name_of_seller)
+    print("REEf", ref_sheet_records)
+    sellers_code = "rain"
     for i in ref_sheet_records:
-        if i["team name"] == sellers_team_name:
+        if i["team name"] == team_name_of_seller:
             sellers_code = i["username"]
+            break
     
-    stock = current_row[11]
-    print(stock)
-    print(private_sheet_records)
-    x = 2
-    found = False
+    if sellers_code == "rain":
+        print("failure")
+    else:
+        print("going forward")
     
-    for i in private_sheet_records:
-        print("hea")
-        print("Company name = = = = ", i["Company name"], "staxxxx = ", stock)
-        print("iIiIiI", i)
-        if i["Company name"] == stock and i["Team Name of seller"] == sellers_team_name:
-            found = True
-            price = i["Total Cost"]
-            
-            amount = i["Amount"]
-            print("AAAMMMOOOUUUNNNT + + = ", amount)
-            
-            buyer_sheet_str = buyers_code
-            buyer_sheet = user_writer_client.open(buyer_sheet_str).sheet1
-            buyer_sheet_list = buyer_sheet.get_all_records()
-            
-            seller_sheet_str = sellers_code
-            seller_sheet = user_writer_client.open(seller_sheet_str).sheet1
-            seller_sheet_list = seller_sheet.get_all_records()
-            
-            buyer_current_cash = buyer_sheet_list[0]["Current Balance"]
-            seller_current_cash = seller_sheet_list[0]["Current Balance"]
-            buyer_new_cash = int(buyer_current_cash) - int(price)
-            if buyer_new_cash > 0:
-                print("OOOOOKKKKK")
-                print(buyer_new_cash)
-                if (buyer_sheet_str != seller_sheet_str):
-                    buyer_sheet.update_cell(2, 1, buyer_new_cash)
-                    seller_current_cash = seller_current_cash
-                    seller_new_cash = int(seller_current_cash) + int(price)
-                    print(seller_new_cash)
-                    seller_sheet.update_cell(2, 1, seller_new_cash)
-                    write_done(done_putter_client, row_num)
-            else:
-                print("NOT ENOUGH BALANCE")
-                print("NOT ENOUGH BALANCE")
-                print("NOT ENOUGH BALANCE")
-                print("NOT ENOUGH BALANCE")
-                print("NOT ENOUGH BALANCE")
-                print("NOT ENOUGH BALANCE")
-                print("NOT ENOUGH BALANCE")
-        
-        else:
-            
-            x += 1
+    if sellers_code == buyers_username:
+        print("buyer == seller")
+        seller_sheet = user_writer_client.open(sellers_code).sheet1
+        seller_sheet_list = seller_sheet.get_all_records()
+        latest = len(seller_sheet_list) + 1
+        seller_sheet.update_cell(latest + 1, 2, stock_name)
+        seller_sheet.update_cell(latest + 1, 3, amount)
+        seller_sheet.update_cell(latest + 1, 4, price)
+        write_done(done_putter_client, row_num)
     
-    if found:
-        buyer_sheet_str = buyers_code
-        buyer_sheet = user_writer_client.open(buyer_sheet_str).sheet1
+    else:
+        buyer_sheet = user_writer_client.open(buyers_username).sheet1
         buyer_sheet_list = buyer_sheet.get_all_records()
+        buyer_latest = len(buyer_sheet_list) + 1
+        
         buyer_current_cash = buyer_sheet_list[0]["Current Balance"]
-        price = i["Total Cost"]
-        buyer_new_cash = int(buyer_current_cash) - int(price)
+        buyer_new_cash = buyer_current_cash - (amount * price)
         if buyer_new_cash > 0:
-            latest = len(buyer_sheet_list) + 1
-            cell_list = buyer_sheet.findall(stock)
-            print("cccc", cell_list)
-            if cell_list == []:
-                buyer_sheet.update_cell(latest + 2, 2, stock)
-                buyer_sheet.update_cell(latest + 2, 3, amount)
-            else:
-                
-                val = cell_list[0]
-                print(val)
-                coords_of_stock_row_str = str(val)
-                
-                stock_val = coords_of_stock_row_str[7]
-                print("val====", stock_val)
-                current_amount = buyer_sheet_list[-1]["Amount"]
-                print("currrrrrr", current_amount)
-                amount = i["Amount"]
-                print("current_amount= ", current_amount)
-                print("amount= ", amount)
-                new_amount = int(current_amount) + int(amount)
-                print("new amount = ", new_amount)
-                buyer_sheet.update_cell(latest, 2, stock)
-                buyer_sheet.update_cell(latest, 3, new_amount)
-                print(
-                    "bbbbbbbbbbbbppppppppppbpbpbppbpbpbpbpbpbpbpbpbppbpbpbpbpbpbpbpbpbpbpbpbppbppbpbpbpbpbpbpbpbpbpbpb   ",
-                    x)
-            private_sheet.delete_rows(x-1)
-            write_done(done_putter_client, row_num)
-        else:
-            print("NOT ENOUGH BALANCE")
-            print("NOT ENOUGH BALANCE")
-            print("NOT ENOUGH BALANCE")
-            print("NOT ENOUGH BALANCE")
-            print("NOT ENOUGH BALANCE")
-            print("NOT ENOUGH BALANCE")
-            print("NOT ENOUGH BALANCE")
+            buyer_sheet.update_cell(2, 1, buyer_new_cash)
+            buyer_sheet.update_cell(buyer_latest + 1, 2, stock_name)
+            buyer_sheet.update_cell(buyer_latest + 1, 3, amount)
+            buyer_sheet.update_cell(buyer_latest + 1, 4, price)
+        # ---------------------------------------------------------------------------
+        seller_sheet = user_writer_client.open(sellers_code).sheet1
+        seller_sheet_list = seller_sheet.get_all_records()
+        
+        seller_current_cash = seller_sheet_list[0]["Current Balance"]
+        seller_new_cash = seller_current_cash + (amount * price)
+        if seller_new_cash > 0:
+            seller_sheet.update_cell(2, 1, seller_new_cash)
+        write_done(done_putter_client, row_num)
 
 
 def write_done(done_putter_client, row_num):
     database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
-    print("rooooooooooooooooooooowwoowowowowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", row_num + 1)
+    print(
+        "rooooooooooooooooooooowwoowowowowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+        row_num + 1)
     database_sheet.update_cell(row_num + 1, 14, "done")
     print("I PUT DONE!!!!!!!!!!")
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 while True:
-    print("working1")
     to_loop()
