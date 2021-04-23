@@ -303,6 +303,7 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
         buyer_latest = len(buyer_sheet_list) + 1
         
         buyer_current_cash = buyer_sheet_list[0]["Current Balance"]
+        print("I to I = ", i)
         price = i["Cost per Share"]
         amount = i["Amount"]
         buyer_new_cash = buyer_current_cash - (amount * price)
