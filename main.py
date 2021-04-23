@@ -62,11 +62,7 @@ def execute_command(current_command, data_getter_client, user_writer_client, don
 
 
 def generate_random_code(number_of_digits):
-    list_of_chars = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', "q", "w", "e", "r", 't', 'y', 'u', 'i', 'o', 'p',
-                     'a',
-                     's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Q', 'W', 'E', 'R', 'T',
-                     'Y',
-                     'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    list_of_chars = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     password = ""
     for j in range(0, number_of_digits, 1):
         password = password + random.choice(list_of_chars)
@@ -234,7 +230,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
             
             private_sheet.update_cell(row, 1, stock_to_sell)
             private_sheet.update_cell(row, 2, team_name)
-            private_sheet.update_cell(row, 3, generate_random_code(6))
+            private_sheet.update_cell(row, 3, generate_random_code(10))
             private_sheet.update_cell(row, 4, amount_to_sell)
             private_sheet.update_cell(row, 5, sellers_price_per_share)
             private_sheet.update_cell(row, 6, '=D' + str(row) + '*E' + str(row))
