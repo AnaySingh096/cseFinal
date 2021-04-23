@@ -42,12 +42,12 @@ def to_loop():
             current_command = full_database_array[iterator]
             
             execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, iterator)
-            time.sleep(25)
+            time.sleep(20)
         else:
             print("not new")
             print("*_*")
         iterator += 1
-    time.sleep(10)
+    time.sleep(7)
 
 
 def execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, row_num):
@@ -257,12 +257,12 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
     buyers_username = current_row[9]
     team_name_of_seller = current_row[10]
     
-    print("rec = = = = ", private_sheet_records)
+    print("CHECK THIS = = = = ", private_sheet_records)
     x = 0
     code_present = False
     for i in private_sheet_records:
         x += 1
-        
+        print("comparing ",i["Unique Transaction ID"], " to ", unique_code)
         if i["Unique Transaction ID"] == unique_code:
             price = i["Cost per Share"]
             amount = i["Amount"]
@@ -275,53 +275,57 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
         print(amount)
         print("row to delete = ", x + 1)
         private_sheet.delete_row(x + 1)
+
+        print("team name of seller ", team_name_of_seller)
+        print("REEf", ref_sheet_records)
+        sellers_code = "rain"
+        for i in ref_sheet_records:
+            if i["team name"] == team_name_of_seller:
+                sellers_code = i["username"]
+                break
+
+        if sellers_code == "rain":
+            print("failure")
+        else:
+            print("going forward")
+
+            if sellers_code == buyers_username:
+                print("buyer == seller")
+                seller_sheet = user_writer_client.open(sellers_code).sheet1
+                seller_sheet_list = seller_sheet.get_all_records()
+                latest = len(seller_sheet_list) + 1
+                seller_sheet.update_cell(latest + 1, 2, stock_name)
+                seller_sheet.update_cell(latest + 1, 3, amount)
+                seller_sheet.update_cell(latest + 1, 4, price)
+                write_done(done_putter_client, row_num)
+    
+            else:
+                buyer_sheet = user_writer_client.open(buyers_username).sheet1
+                buyer_sheet_list = buyer_sheet.get_all_records()
+                buyer_latest = len(buyer_sheet_list) + 1
+        
+                buyer_current_cash = buyer_sheet_list[0]["Current Balance"]
+                buyer_new_cash = buyer_current_cash - (amount * price)
+                if buyer_new_cash > 0:
+                    buyer_sheet.update_cell(2, 1, buyer_new_cash)
+                    buyer_sheet.update_cell(buyer_latest + 1, 2, stock_name)
+                    buyer_sheet.update_cell(buyer_latest + 1, 3, amount)
+                    buyer_sheet.update_cell(buyer_latest + 1, 4, price)
+                # ---------------------------------------------------------------------------
+                seller_sheet = user_writer_client.open(sellers_code).sheet1
+                seller_sheet_list = seller_sheet.get_all_records()
+        
+                seller_current_cash = seller_sheet_list[0]["Current Balance"]
+                seller_new_cash = seller_current_cash + (amount * price)
+                if seller_new_cash > 0:
+                    seller_sheet.update_cell(2, 1, seller_new_cash)
+                write_done(done_putter_client, row_num)
+        
     else:
         print("transaction does not exist")
+        write_done(done_putter_client,row_num)
     
-    print("team name of seller ", team_name_of_seller)
-    print("REEf", ref_sheet_records)
-    sellers_code = "rain"
-    for i in ref_sheet_records:
-        if i["team name"] == team_name_of_seller:
-            sellers_code = i["username"]
-            break
     
-    if sellers_code == "rain":
-        print("failure")
-    else:
-        print("going forward")
-    
-    if sellers_code == buyers_username:
-        print("buyer == seller")
-        seller_sheet = user_writer_client.open(sellers_code).sheet1
-        seller_sheet_list = seller_sheet.get_all_records()
-        latest = len(seller_sheet_list) + 1
-        seller_sheet.update_cell(latest + 1, 2, stock_name)
-        seller_sheet.update_cell(latest + 1, 3, amount)
-        seller_sheet.update_cell(latest + 1, 4, price)
-        write_done(done_putter_client, row_num)
-    
-    else:
-        buyer_sheet = user_writer_client.open(buyers_username).sheet1
-        buyer_sheet_list = buyer_sheet.get_all_records()
-        buyer_latest = len(buyer_sheet_list) + 1
-        
-        buyer_current_cash = buyer_sheet_list[0]["Current Balance"]
-        buyer_new_cash = buyer_current_cash - (amount * price)
-        if buyer_new_cash > 0:
-            buyer_sheet.update_cell(2, 1, buyer_new_cash)
-            buyer_sheet.update_cell(buyer_latest + 1, 2, stock_name)
-            buyer_sheet.update_cell(buyer_latest + 1, 3, amount)
-            buyer_sheet.update_cell(buyer_latest + 1, 4, price)
-        # ---------------------------------------------------------------------------
-        seller_sheet = user_writer_client.open(sellers_code).sheet1
-        seller_sheet_list = seller_sheet.get_all_records()
-        
-        seller_current_cash = seller_sheet_list[0]["Current Balance"]
-        seller_new_cash = seller_current_cash + (amount * price)
-        if seller_new_cash > 0:
-            seller_sheet.update_cell(2, 1, seller_new_cash)
-        write_done(done_putter_client, row_num)
 
 
 def write_done(done_putter_client, row_num):
