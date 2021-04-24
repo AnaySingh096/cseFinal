@@ -43,12 +43,12 @@ def to_loop():
             current_command = full_database_array[iterator]
             
             execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, iterator)
-            time.sleep(20)
+            time.sleep(3)
         else:
             print("not new")
             print("*_*")
         iterator += 1
-    time.sleep(7)
+    time.sleep(2)
 
 
 def execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, row_num):
@@ -193,7 +193,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     user_sheet_list = user_sheet.get_all_records()
     stock_present = False
     x = 0
-    ###ldldldddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+    
     gallery_sheet = data_getter_client.open("stock_market_sim").sheet1
     stock_data = gallery_sheet.get_all_records()
     coords_of_stock = cell = gallery_sheet.find(stock_to_sell)
