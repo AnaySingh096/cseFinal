@@ -28,7 +28,7 @@ def init():
 
 
 def to_loop():
-    pint("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
+    print("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
     full_database_sheet = survey_reader_client.open(
         "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
