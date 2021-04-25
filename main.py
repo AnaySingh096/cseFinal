@@ -43,7 +43,7 @@ def to_loop():
             current_command = full_database_array[iterator]
             
             execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, iterator)
-            time.sleep(3)
+            time.sleep(2)
         else:
             print("not new")
             print("*_*")
