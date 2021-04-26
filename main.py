@@ -30,7 +30,7 @@ def init():
 def to_loop():
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
     full_database_sheet = survey_reader_client.open(
-        "CSE Alpha buy/sell stocks2 (Responses)").sheet1  # Open the survey sheet
+        "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
     full_database_array = full_database_sheet.get_all_values()
     # print(full_database_array)
     
@@ -330,7 +330,7 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
 
 
 def write_done(done_putter_client, row_num):
-    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks2 (Responses)").sheet1
+    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
     print(
         "rooooooooooooooooooooowwoowowowowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
         row_num + 1)
