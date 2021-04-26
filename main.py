@@ -27,28 +27,36 @@ def init():
     return survey_reader_client, data_getter_client, user_writer_client, done_putter_client
 
 
-def to_loop():
+def to_loop(iterator):
     print("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
+    preload_time = datetime.now()
     full_database_sheet = survey_reader_client.open(
         "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
     full_database_array = full_database_sheet.get_all_values()
+    postload_time = datetime.now()
     # print(full_database_array)
     
-    iterator = 0
-    
-    print("IIIIIIIIIII", full_database_array)
+    # print("IIIIIIIIIII", full_database_array)    
+    print("Loaded Responses.....Time taken =", (postload_time-preload_time).total_seconds(), end="\n\n\n")
+
     while iterator < len(full_database_array):
         if full_database_array[iterator][-1] != "done":
+            command_start_time = datetime.now()
             current_command = full_database_array[iterator]
             
             execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, iterator)
             time.sleep(3)
-        else:
-            print("not new")
-            print("*_*")
+            command_end_time = datetime.now()
+            print("Executed row {0}....Time taken = {1}".format(iterator, (command_end_time-command_start_time).total_seconds()))
+
+        # else:
+            # print("not new")
+            # print("*_*")
         iterator += 1
     time.sleep(2)
+
+    return iterator
 
 
 def execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, row_num):
@@ -327,17 +335,20 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
         write_done(done_putter_client,row_num)
     
     
-
+def write_error(done_putter_client, row_num, error_message):
+    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
+    print("Error raised: "+error_message)
+    database_sheet.update_cell(row_num + 1, 14, "done")
+    database_sheet.update_cell(row_num + 1, 15, error_message)
 
 def write_done(done_putter_client, row_num):
     database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
-    print(
-        "rooooooooooooooooooooowwoowowowowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-        row_num + 1)
+    print("Row",row_num + 1)
     database_sheet.update_cell(row_num + 1, 14, "done")
-    print("I PUT DONE!!!!!!!!!!")
+    print("I PUT DONE!")
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+i=1
 while True:
-    to_loop()
+    i=to_loop(i)
