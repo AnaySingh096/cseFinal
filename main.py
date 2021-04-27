@@ -32,7 +32,7 @@ def to_loop(iterator):
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
     preload_time = datetime.now()
     full_database_sheet = survey_reader_client.open(
-        "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
+        "CSE Alpha buy/sell stocks2 (Responses)").sheet1  # Open the survey sheet
     full_database_array = full_database_sheet.get_all_values()
     postload_time = datetime.now()
     # print(full_database_array)
@@ -331,13 +331,13 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
     
     
 def write_error(done_putter_client, row_num, error_message):
-    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
+    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks2 (Responses)").sheet1
     print("Error raised: "+error_message)
     database_sheet.update_cell(row_num + 1, 14, "done")
     database_sheet.update_cell(row_num + 1, 15, error_message)
 
 def write_done(done_putter_client, row_num):
-    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
+    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks2 (Responses)").sheet1
     print("Row",row_num + 1)
     database_sheet.update_cell(row_num + 1, 14, "done")
     print("I PUT DONE!")
