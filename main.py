@@ -131,13 +131,7 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
         current_balance_val = int(current_balance_val)
     new_balance = current_balance_val - total_cost
     if new_balance < 0:
-        print("NOT ENOUGH BALANCE")
-        print("NOT ENOUGH BALANCE")
-        print("NOT ENOUGH BALANCE")
-        print("NOT ENOUGH BALANCE")
-        print("NOT ENOUGH BALANCE")
-        print("NOT ENOUGH BALANCE")
-        print("NOT ENOUGH BALANCE")
+        write_error(done_putter_client, row_num,"not enough balance")
     
     print("new_balance = ", new_balance)
     
@@ -250,8 +244,9 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
             
             write_done(done_putter_client, row_num)
     else:
+        write_error(done_putter_client, row_num,"tried to sell for too LOW or too HIGH or had too few shares to sell")
         print("tried to sell for too LOW or too HIGH")
-        write_done(done_putter_client, row_num)
+        
 
 
 def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_client, row_num):
@@ -331,8 +326,8 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                 write_done(done_putter_client, row_num)
         
     else:
-        print("transaction does not exist")
-        write_done(done_putter_client,row_num)
+        write_error(done_putter_client, row_num,"transaction does not exist")
+        
     
     
 def write_error(done_putter_client, row_num, error_message):
