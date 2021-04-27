@@ -32,18 +32,23 @@ def to_loop(iterator):
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
     preload_time = datetime.now()
     full_database_sheet = survey_reader_client.open(
-        "CSE Alpha buy/sell stocks2 (Responses)").sheet1  # Open the survey sheet
-    full_database_array = full_database_sheet.get_all_values()
+        "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
+    # full_database_array = full_database_sheet.get_all_values()
+    
+    partial_database_array = full_database_sheet.get('A'+str(iterator)+':N')
     postload_time = datetime.now()
-    # print(full_database_array)
+    print(partial_database_array)
+    print(len(partial_database_array))
+    # print(partial_database_array[1], len(partial_database_array[1]))
     
     # print("IIIIIIIIIII", full_database_array)    
     print("Loaded Responses.....Time taken =", (postload_time-preload_time).total_seconds(), end="\n\n\n")
 
-    while iterator < len(full_database_array):
-        if full_database_array[iterator][-1] != "done":
+    # while iterator < len(full_database_array):
+    for i in range(len(partial_database_array)):
+        if partial_database_array[i][-1] != "done":
             command_start_time = datetime.now()
-            current_command = full_database_array[iterator]
+            current_command = partial_database_array[i]
             
             execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, iterator)
             time.sleep(3)
@@ -130,12 +135,12 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
     except:
         current_balance_val = int(current_balance_val)
     new_balance = current_balance_val - total_cost
-    if new_balance < 0:
-        write_error(done_putter_client, row_num,"not enough balance")
     
     print("new_balance = ", new_balance)
     
-    if new_balance > 0:
+    if new_balance <= 0:
+        write_error(done_putter_client, row_num,"not enough balance")
+    else:
         user_sheet.update_cell(2, 1, new_balance)
         # check if stock exists
         cell_list = user_sheet.findall(stock)
@@ -233,6 +238,9 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
                 user_sheet.update_cell(x + 1, 3, str(new_amount_of_stock_to_sell))
                 if new_amount_of_stock_to_sell == 0:
                     user_sheet.delete_row(x + 1)
+            else:
+                write_error(done_putter_client, row_num, "Tried to sell more shares than owned")
+                return
             row = len(private_sheet_records) + 2
             
             private_sheet.update_cell(row, 1, stock_to_sell)
@@ -243,9 +251,10 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
             private_sheet.update_cell(row, 6, '=D' + str(row) + '*E' + str(row))
             
             write_done(done_putter_client, row_num)
+        else:
+            write_error(done_putter_client, row_num, "Stock not present")
     else:
         write_error(done_putter_client, row_num,"tried to sell for too LOW or too HIGH or had too few shares to sell")
-        print("tried to sell for too LOW or too HIGH")
         
 
 
@@ -290,6 +299,7 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
 
         if sellers_code == "rain":
             print("failure")
+            write_error(done_putter_client, row_num, "Seller doesn't exist")
         else:
             print("going forward")
 
@@ -315,6 +325,9 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                     buyer_sheet.update_cell(buyer_latest + 1, 2, stock_name)
                     buyer_sheet.update_cell(buyer_latest + 1, 3, amount)
                     buyer_sheet.update_cell(buyer_latest + 1, 4, price)
+                else:
+                    write_error(done_putter_client, row_num, "Not enough balance for buy private")
+                    return
                 # ---------------------------------------------------------------------------
                 seller_sheet = user_writer_client.open(sellers_code).sheet1
                 seller_sheet_list = seller_sheet.get_all_records()
@@ -331,19 +344,19 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
     
     
 def write_error(done_putter_client, row_num, error_message):
-    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks2 (Responses)").sheet1
+    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
     print("Error raised: "+error_message)
-    database_sheet.update_cell(row_num + 1, 14, "done")
-    database_sheet.update_cell(row_num + 1, 15, error_message)
+    database_sheet.update_cell(row_num, 14, "done")
+    database_sheet.update_cell(row_num, 15, error_message)
 
 def write_done(done_putter_client, row_num):
-    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks2 (Responses)").sheet1
-    print("Row",row_num + 1)
-    database_sheet.update_cell(row_num + 1, 14, "done")
+    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
+    print("Row",row_num)
+    database_sheet.update_cell(row_num, 14, "done")
     print("I PUT DONE!")
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-i=1
+i=2
 while True:
     i=to_loop(i)
