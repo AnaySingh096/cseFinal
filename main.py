@@ -7,6 +7,8 @@ import random
 
 now = datetime.now()
 
+responses_sheet = "CSE Alpha buy/sell stocks (Responses)"
+
 
 def init():
     scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
@@ -31,8 +33,7 @@ def to_loop(iterator):
     print("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111")
     survey_reader_client, data_getter_client, user_writer_client, done_putter_client = init()
     preload_time = datetime.now()
-    full_database_sheet = survey_reader_client.open(
-        "CSE Alpha buy/sell stocks (Responses)").sheet1  # Open the survey sheet
+    full_database_sheet = survey_reader_client.open(responses_sheet).sheet1  # Open the survey sheet
     # full_database_array = full_database_sheet.get_all_values()
     
     partial_database_array = full_database_sheet.get('A' + str(iterator) + ':N')
@@ -361,6 +362,11 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                 seller_sheet_list = seller_sheet.get_all_records()
                 
                 seller_current_cash = seller_sheet_list[0]["Current Balance"]
+                 try:
+                    seller_current_cash = int(seller_current_cash.replace(",", ""))
+                except:
+                    seller_current_cash = int(seller_current_cash)
+                    
                 seller_new_cash = seller_current_cash + (amount * price)
                 if seller_new_cash > 0:
                     seller_sheet.update_cell(2, 1, seller_new_cash)
@@ -373,14 +379,14 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
 
 
 def write_error(done_putter_client, row_num, error_message):
-    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
+    database_sheet = done_putter_client.open(responses_sheet).sheet1
     print("Error raised: " + error_message)
     database_sheet.update_cell(row_num, 14, "done")
     database_sheet.update_cell(row_num, 15, error_message)
 
 
 def write_done(done_putter_client, row_num):
-    database_sheet = done_putter_client.open("CSE Alpha buy/sell stocks (Responses)").sheet1
+    database_sheet = done_putter_client.open(responses_sheet).sheet1
     print("Row", row_num)
     database_sheet.update_cell(row_num, 14, "done")
     print("I PUT DONE!")
