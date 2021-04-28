@@ -329,7 +329,14 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                 buyer_sheet_list = buyer_sheet.get_all_records()
                 buyer_latest = len(buyer_sheet_list) + 1
                 
+                    
                 buyer_current_cash = buyer_sheet_list[0]["Current Balance"]
+                
+                try:
+                    buyer_current_cash = int(buyer_current_cash.replace(",", ""))
+                except:
+                    buyer_current_cash = int(buyer_current_cash)
+                
                 buyer_new_cash = buyer_current_cash - (amount * price)
                 if buyer_new_cash > 0:
                     buyer_sheet.update_cell(2, 1, buyer_new_cash)
