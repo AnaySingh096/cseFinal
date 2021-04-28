@@ -150,7 +150,7 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
     
     print("new_balance = ", new_balance)
     
-    if new_balance <= 0:
+    if new_balance < 0:
         write_error(done_putter_client, row_num, "not enough balance")
     else:
         user_sheet.update_cell(2, 1, new_balance)
@@ -338,7 +338,7 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                     buyer_current_cash = int(buyer_current_cash)
                 
                 buyer_new_cash = buyer_current_cash - (amount * price)
-                if buyer_new_cash > 0:
+                if buyer_new_cash >= 0:
                     buyer_sheet.update_cell(2, 1, buyer_new_cash)
                     buyer_sheet.update_cell(buyer_latest + 1, 2, stock_name)
                     buyer_sheet.update_cell(buyer_latest + 1, 3, amount)
