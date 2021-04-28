@@ -279,7 +279,7 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
     
     unique_code = current_row[11]
     buyers_username = current_row[9]
-    team_name_of_seller = str(current_row[10]).strip()
+    team_name_of_seller = str(current_row[10]).strip().upper()
     
     print("CHECK THIS = = = = ", private_sheet_records)
     x = 0
