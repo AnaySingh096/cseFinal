@@ -77,7 +77,7 @@ def execute_command(current_command, data_getter_client, user_writer_client, don
     print("TIME", current_time, " hour = ", current_time[0:3], " min ", current_time[3:5], "full time", total_time)
     
     if current_type == "buy public":
-        if 9.0 <= total_time <= 4.5:
+        if 9.2 <= total_time <= 4.5:
             buy_public(current_command, data_getter_client, user_writer_client, done_putter_client, row_num)
         else:
             write_error(done_putter_client,row_num,"buy public at wrong time")
