@@ -220,6 +220,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     print("STOCK NAME = = ", stock_to_sell)
     # sellers_user_code = current_row['Your user code is:']
     amount_to_sell = int(current_row[7])
+    
     sellers_price_per_share = int(current_row[8])
     print("current row ----- ", current_row)
     user_sheet_str = sellers_user_code
@@ -261,6 +262,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
             print("X is ", x)
         if stock_present:
             # 99,00,1 ->99001
+            amount_add_to_privat_market  = amount_to_sell
             new_amount_of_stock_to_sell = int(current_amount) - int(amount_to_sell)
             print(new_amount_of_stock_to_sell)
             if new_amount_of_stock_to_sell >= 0:
@@ -291,7 +293,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
             private_sheet.update_cell(row, 1, stock_to_sell)
             private_sheet.update_cell(row, 2, team_name)
             private_sheet.update_cell(row, 3, generate_random_code(6))
-            private_sheet.update_cell(row, 4, amount_to_sell)
+            private_sheet.update_cell(row, 4, amount_add_to_privat_market)
             private_sheet.update_cell(row, 5, sellers_price_per_share)
             private_sheet.update_cell(row, 6, '=D' + str(row) + '*E' + str(row))
             
