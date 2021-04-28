@@ -129,8 +129,15 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
     price = stock_data[int(row) - 2]["Average\nPrice"]
     num_of_stocks = stock_data[int(row) - 2]["Number of\nShares"]
     print("--------------------price = ", price)
+    new = int(num_of_stocks) - float(amount)
+    #check if enough available public stocks
+    if new < 0:
+        write_error(done_putter_client, row_num, "Not enough public stocks")
+        return
+    
     total_cost = int(amount) * int(price)
     print(total_cost)
+    
     user_sheet_str = user_code
     
     user_sheet = user_writer_client.open(user_sheet_str).sheet1
@@ -165,7 +172,8 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
         user_sheet.update_cell(latest + 1, 4, price)
         
         print("RRRRROOOOOOWWW", row)
-        new = int(num_of_stocks) - float(amount)
+        
+        # Updating number of stocks remaining in gallery sheet
         gallery_sheet.update_cell(int(row), 11, new)
         
         write_done(done_putter_client, row_num)
