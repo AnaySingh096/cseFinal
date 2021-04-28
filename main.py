@@ -297,8 +297,8 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
         print("TRUE")
         print(price)
         print(amount)
-        print("row to delete = ", x + 1)
-        private_sheet.delete_row(x + 1)
+        
+        
         
         print("team name of seller ", team_name_of_seller)
         print("REEf", ref_sheet_records)
@@ -355,7 +355,9 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                 if seller_new_cash > 0:
                     seller_sheet.update_cell(2, 1, seller_new_cash)
                 write_done(done_putter_client, row_num)
-    
+            private_sheet.delete_row(x + 1)
+            print("row to delete = ", x + 1)
+                
     else:
         write_error(done_putter_client, row_num, "transaction does not exist")
 
