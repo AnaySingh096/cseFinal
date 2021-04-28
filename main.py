@@ -75,13 +75,15 @@ def execute_command(current_command, data_getter_client, user_writer_client, don
     min_in_dec = float(current_time[3:5])/60
     total_time = hour+min_in_dec
     print("TIME", current_time, " hour = ", current_time[0:3], " min ", current_time[3:5], "full time", total_time)
-    
+    """
     if current_type == "buy public":
         if 0 <= total_time <= 300:
             buy_public(current_command, data_getter_client, user_writer_client, done_putter_client, row_num)
         else:
             write_error(done_putter_client,row_num,"buy public at wrong time")
-    elif current_type == "sell private(make offer)":
+    """
+    # add el
+    if current_type == "sell private(make offer)":
         sell_private(current_command, data_getter_client, user_writer_client, done_putter_client, row_num)
     elif current_type == "buy private":
         buyPrivate(current_command, data_getter_client, user_writer_client, done_putter_client, row_num)
