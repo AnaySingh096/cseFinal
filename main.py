@@ -51,7 +51,7 @@ def to_loop(iterator):
             current_command = partial_database_array[i]
             
             execute_command(current_command, data_getter_client, user_writer_client, done_putter_client, iterator)
-            time.sleep(3)
+            time.sleep(5)
             command_end_time = datetime.now()
             print("Executed row {0}....Time taken = {1}".format(iterator, (
                         command_end_time - command_start_time).total_seconds()))
@@ -60,7 +60,7 @@ def to_loop(iterator):
         # print("not new")
         # print("*_*")
         iterator += 1
-    time.sleep(2)
+    time.sleep(3)
     
     return iterator
 
