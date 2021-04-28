@@ -277,8 +277,8 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
     private_sheet_records = private_sheet.get_all_records()
     print("currr = === = ", current_row)
     
-    unique_code = current_row[11]
-    buyers_username = current_row[9]
+    unique_code = current_row[11].strip()
+    buyers_username = current_row[9].strip()
     team_name_of_seller = str(current_row[10]).strip().upper()
     
     print("CHECK THIS = = = = ", private_sheet_records)
