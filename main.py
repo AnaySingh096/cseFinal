@@ -231,7 +231,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     amount_to_sell = int(current_row[7])
     to_put_on_private_market = amount_to_sell
     
-    sellers_price_per_share = int(current_row[8])
+    sellers_price_per_share = int(float(current_row[8]))
     print("current row ----- ", current_row)
     user_sheet_str = sellers_user_code
     user_sheet = user_writer_client.open(user_sheet_str).sheet1
