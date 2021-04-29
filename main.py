@@ -364,7 +364,6 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                 password_verified = True
             if i["team name"] == team_name_of_seller:
                 sellers_code = i["username"]
-                break
         
         #Verifying if buyer password is correct
         if not password_verified:
