@@ -155,8 +155,13 @@ def buy_public(current_row, data_getter_client, user_writer_client, done_putter_
     
     user_sheet_str = user_code
     
-    user_sheet = user_writer_client.open(user_sheet_str).sheet1
-    user_sheet_list = user_sheet.get_all_records()
+    try:
+        user_sheet = user_writer_client.open(user_sheet_str).sheet1
+        user_sheet_list = user_sheet.get_all_records()
+    except:
+        write_error(done_putter_client, row_num, "Sheet does not exist")
+        return
+
     latest = len(user_sheet_list) + 1
     print("latest= ", latest)
     print(user_sheet_list)
@@ -214,13 +219,18 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     ref_sheet_records = ref_sheet.get_all_records()
     
     sellers_user_code = current_row[5]
+    team_name = 'DG'
     for i in ref_sheet_records:
         # print("reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef;;; ", i)
         
         code = i["username"]
         if code == sellers_user_code:
             team_name = i['team name']
-    # print(team_name)
+    print(team_name)
+    if team_name == 'DG':
+        write_error(done_putter_client, row_num, "Password is invalid")
+        return
+
     row_num_a = len(private_sheet_records) + 2
     print("row_num = ", row_num_a)
     # print("PRIVATE SHEEEEET  ", private_sheet_records)
@@ -229,7 +239,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     print("STOCK NAME = = ", stock_to_sell)
     # sellers_user_code = current_row['Your user code is:']
     amount_to_sell = int(current_row[7])
-    to_put_on_private_market = amount_to_sell
+    copy_amount_to_sell = amount_to_sell
     
     sellers_price_per_share = int(float(current_row[8]))
     print("current row ----- ", current_row)
@@ -303,7 +313,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
                 private_sheet.update_cell(row, 1, stock_to_sell)
                 private_sheet.update_cell(row, 2, team_name)
                 private_sheet.update_cell(row, 3, generate_random_code(6))
-                private_sheet.update_cell(row, 4, to_put_on_private_market)
+                private_sheet.update_cell(row, 4, copy_amount_to_sell)
                 private_sheet.update_cell(row, 5, sellers_price_per_share)
                 private_sheet.update_cell(row, 6, '=D' + str(row) + '*E' + str(row))
                 
@@ -311,9 +321,9 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
             else:
                 write_error(done_putter_client, row_num, "Stock not present")
         else:
-            write_error(done_putter_client, row_num, "tried to sell for too LOW or too HIGH or had too few shares to sell")
+            write_error(done_putter_client, row_num, "tried to sell for too LOW or too HIGH")
     except:
-        print("loadining")
+        print("loading")
         time.sleep(1)
 
 def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_client, row_num):
@@ -348,11 +358,19 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
         print("team name of seller ", team_name_of_seller)
         print("REEf", ref_sheet_records)
         sellers_code = "rain"
+        password_verified == False
         for i in ref_sheet_records:
+            if i["username"] == buyers_username:
+                password_verified = True
             if i["team name"] == team_name_of_seller:
                 sellers_code = i["username"]
                 break
         
+        #Verifying if buyer password is correct
+        if not password_verified:
+            write_error(done_putter_client, row_num, "Buyer password is wrong")
+            return
+
         if sellers_code == "rain":
             print("failure")
             write_error(done_putter_client, row_num, "Seller doesn't exist")
@@ -435,5 +453,5 @@ i = 2
 while True:
     try:
         i = to_loop(i)
-    except:
-        i = to_loop(i)
+    except Exception as e:
+        print("Error raised!!!",e,"\nCheck Responses sheet.\nAfter or in row",i)
