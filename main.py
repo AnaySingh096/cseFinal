@@ -211,7 +211,10 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
     """
     
     private_sheet = done_putter_client.open("private_market").sheet1
+    locking_mechanism(private_sheet)
     private_sheet_records = private_sheet.get_all_records()
+    
+    
     # print("PRIVATE SHEEEEEET = = ", private_sheet_records)
     ref_sheet = done_putter_client.open("Ref Sheet").sheet1
     ref_sheet_records = ref_sheet.get_all_records()
@@ -309,7 +312,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
                 
                 
                 
-                locking_mechanism(private_sheet)
+                
                 
                 private_sheet.update_cell(row, 1, stock_to_sell)
                 private_sheet.update_cell(row, 2, team_name)
@@ -330,11 +333,14 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
 
 
 def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_client, row_num):
+    
     ref_sheet = done_putter_client.open("Ref Sheet").sheet1
     ref_sheet_records = ref_sheet.get_all_records()
     
     private_sheet = done_putter_client.open("private_market").sheet1
+    locking_mechanism(private_sheet)
     private_sheet_records = private_sheet.get_all_records()
+    
     print("currr = === = ", current_row)
     
     unique_code = current_row[11].strip()
@@ -424,7 +430,9 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
                 if seller_new_cash > 0:
                     seller_sheet.update_cell(2, 1, seller_new_cash)
                 write_done(done_putter_client, row_num)
-            locking_mechanism(private_sheet)
+                
+            
+            
             private_sheet.delete_row(x + 1)
             print("row to delete = ", x + 1)
             private_sheet.update_cell(2, 7, "null")
