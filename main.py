@@ -310,7 +310,8 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
                     return
                 row = len(private_sheet_records) + 2
                 
-                private_sheet.update_cell(row, 1, stock_to_sell)
+                flag = private_sheet.update_cell(row, 1, stock_to_sell)
+                print("Flag: ", flag)
                 private_sheet.update_cell(row, 2, team_name)
                 private_sheet.update_cell(row, 3, generate_random_code(6))
                 private_sheet.update_cell(row, 4, copy_amount_to_sell)
