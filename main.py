@@ -309,9 +309,10 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
                     write_error(done_putter_client, row_num, "Tried to sell more shares than owned")
                     return
                 row = len(private_sheet_records) + 2
-                
-                flag = private_sheet.update_cell(row, 1, stock_to_sell)
-                print("Flag: ", flag)
+                try:
+                    flag = private_sheet.update_cell(row, 1, stock_to_sell)
+                except:
+                    print("Flag: ")
                 private_sheet.update_cell(row, 2, team_name)
                 private_sheet.update_cell(row, 3, generate_random_code(6))
                 private_sheet.update_cell(row, 4, copy_amount_to_sell)
