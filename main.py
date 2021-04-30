@@ -358,7 +358,7 @@ def buyPrivate(current_row, data_getter_client, user_writer_client, done_putter_
         print("team name of seller ", team_name_of_seller)
         print("REEf", ref_sheet_records)
         sellers_code = "rain"
-        password_verified == False
+        password_verified = False
         for i in ref_sheet_records:
             if i["username"] == buyers_username:
                 password_verified = True
