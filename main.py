@@ -84,7 +84,7 @@ def execute_command(current_command, data_getter_client, user_writer_client, don
     print(t, type(t))
     time = datetime.time(t.hour,t.minute, t.second)
     opening = datetime.time(9, 14, 30)
-    closing = datetime.time(18, 0, 30)
+    closing = datetime.time(16, 30, 30)
     
     if current_type == "buy public":
         if opening <= time <= closing and t.weekday() < 5:
