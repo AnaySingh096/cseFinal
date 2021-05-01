@@ -291,6 +291,7 @@ def sell_private(current_row, data_getter_client, user_writer_client, done_putte
                             delete.append(t+1)
                         else:
                             user_sheet.update_cell(t + 1, 3, v-amount_to_sell)
+                            break
                     rows_deleted = 0
                     for k in delete:
                         user_sheet.delete_row(k - rows_deleted)
